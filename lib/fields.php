@@ -3,41 +3,7 @@
 /**
  * Genetate some fake content for ACF flexible content fields
  */
-class Generate_Posts {
-
-    public function create_post( $post_type = 'post' ){
-
-        $faker = Faker\Factory::create();
-
-        $post_id = wp_insert_post(array (
-            'post_type' => $post_type,
-            'post_title' => $faker->word()." ".$faker->word()." ".$faker->word()." ".$faker->word(),
-            // 'post_content' => $your_content,
-            'post_status' => 'publish',
-        ));
-
-        //ASTODO add post_id to global post array for later deletion
-        return $post_id;
-
-    }
-
-    private function get_post_types($echo = false){
-
-        $args = array(
-           'public'   => true,
-        );
-
-        foreach ( get_post_types( $args, 'names' ) as $post_type ) {
-            // echo "- ".$post_type . "\n";
-            if($echo == true){
-                echo "- ".$post_type . "\n";
-            }
-            $post_types[] = $post_type;
-        }
-
-        return $post_types;
-
-    }
+class Generate_Fields {
 
     private function build_random_html_array(){
 
@@ -100,6 +66,20 @@ class Generate_Posts {
         }
 
         return $attachment_id;
+
+    }
+
+
+    public function generate_content_for_field( $post_id = 0, $field = array() ){
+
+        $this->faker = Faker\Factory::create();
+
+
+        if( $field['type'] == 'url' ){
+
+            update_field( $field['key'], $this->faker->domainName(), $post_id );
+
+        }
 
     }
 

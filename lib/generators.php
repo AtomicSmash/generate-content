@@ -7,43 +7,32 @@ class Generate_Cli extends \WP_CLI_Command {
 
     function posts( $content_type = null ){
 
+        $generate_post = new Generate_Posts();
+
         if( isset($content_type[0]) ){
 
             $post_types = $this->get_post_types();
 
             if(in_array($content_type[0], $post_types)){
 
-                $post_id = $this->create_post($content_type[0]);
 
-                $fields = $this->find_field_groups_and_generate( $post_id );
+
+                $post_id = $generate_post->create_post($content_type[0]);
+
+                $fields = $this->save_custom_fields( $post_id );
 
             }
 
         }else{
 
+            //ASTODO replace with cli output
             echo "Please provide a content type as the last argument, for example: 'wp generate-a-tron generate page':\n";
 
-            $this->get_post_types(true);
+            $this->get_post_types( true );
 
         }
     }
 
-    private function create_post( $post_type = 'post' ){
-
-        $faker = Faker\Factory::create();
-
-        $post_id = wp_insert_post(array (
-            'post_type' => $post_type,
-            'post_title' => $faker->word()." ".$faker->word()." ".$faker->word()." ".$faker->word(),
-            // 'post_content' => $your_content,
-            'post_status' => 'publish',
-        ));
-
-        //ASTODO add post_id to global post array for later deletion
-        return $post_id;
-
-        // return 8;
-    }
 
     private function get_post_types($echo = false){
 
@@ -127,201 +116,160 @@ class Generate_Cli extends \WP_CLI_Command {
 
     }
 
-    private function find_field_groups_and_generate( $post_id = 0 ){
+    private function save_custom_fields( $post_id = 0 ){
 
         $this->faker = Faker\Factory::create();
 
+        $generate_fields = new Generate_Fields();
+
         $available_fields = array();
-
-        // $test = get_field('field_54ae9bad435f9',5);
-        //
-        // echo "<pre>";
-        // print_r($test);
-        // echo "</pre>";
-        //
-        // $value[] = array("field_54aea320c8f4f" => 'content', "acf_fc_layout" => "content_blocks__wysiwyg");
-        //
-        // echo "<pre>";
-        // print_r($value);
-        // echo "</pre>";
-        //
-        // update_field( 'field_54ae9bad435f9', $value, 5 );
-
-
 
         $html_array = $this->build_random_html_array();
 
-        // echo "<pre>";
-        // print_r($html_array);
-        // echo "</pre>";
+        if( function_exists( 'acf_get_field_groups' )){
 
-        // die();
+            $groups = acf_get_field_groups( array( 'post_id' => $post_id ) );
 
-        $groups = acf_get_field_groups( array( 'post_id' => $post_id ) );
-
-
-        // echo "<pre>";
-        // print_r($groups);
-        // echo "</pre>";
+            foreach( $groups as $group ){
 
 
 
-        foreach( $groups as $group ){
-
-
-
-            // Way of generating fake HTML
-            // $document = new \DOMDocument();
-            // // $this->idGenerator = new UniqueGenerator($this->generator);
-            //
-            // $head = $document->createElement("head");
-            // $body = $document->createElement("body");
-            // $node = $document->createElement("p");
-            //
-            // $document->appendChild($node);
-            //
-            // $text = $document->createTextNode('asdhaskjdhaskdjhask akjsdh akdjhas kdjhask');
-            // $link = $document->createElement('a');
-            // $link->setAttribute("href", 'example-link');
-            // $link->appendChild($text);
-            // $node->appendChild($link);
-            //
-            //
-            // echo $document->saveHTML();
-
-
-
-
-            // die();
-
-            $fields = acf_get_fields( $group );
-
-            $supported_field_types = array('email', 'text', 'textarea', 'repeater', 'flexible_content', 'qtranslate_file', 'qtranslate_image', 'qtranslate_text', 'qtranslate_textarea', 'qtranslate_wysiwyg');
-
-            $supported_field_ids = array('field_54ae9bad435f9');
-
-            foreach( $fields as $field ) {
+                // Way of generating fake HTML
+                // $document = new \DOMDocument();
+                // // $this->idGenerator = new UniqueGenerator($this->generator);
                 //
+                // $head = $document->createElement("head");
+                // $body = $document->createElement("body");
+                // $node = $document->createElement("p");
+                //
+                // $document->appendChild($node);
+                //
+                // $text = $document->createTextNode('asdhaskjdhaskdjhask akjsdh akdjhas kdjhask');
+                // $link = $document->createElement('a');
+                // $link->setAttribute("href", 'example-link');
+                // $link->appendChild($text);
+                // $node->appendChild($link);
+                //
+                //
+                // echo $document->saveHTML();
 
 
-                // if (in_array($field['type'], $supported_field_types)) {
-                // if (in_array($field['key'], $supported_field_ids)) {
-
-                    if( $field['type'] == 'flexible_content' ){
-
-                        foreach ($field['layouts'] as $layout) {
-
-                            foreach ($layout['sub_fields'] as $key => $sub_field) {
-
-                                // echo "<pre>";
-                                // print_r($sub_field['label']."\n");
-                                // echo "</pre>";
 
 
+                // die();
 
-                                if($sub_field['label'] == 'WYSIWYG'){
-                                    // $available_fields = array(
-                                    //     array($sub_field['key'] => $html_array[2], "acf_fc_layout" => $layout['name'])
-                                    // );
+                $fields = acf_get_fields( $group );
+
+                $supported_field_types = array('email', 'text', 'textarea', 'repeater', 'flexible_content', 'qtranslate_file', 'qtranslate_image', 'qtranslate_text', 'qtranslate_textarea', 'qtranslate_wysiwyg');
+
+                $supported_field_ids = array('field_54ae9bad435f9');
+
+                foreach( $fields as $field ) {
+                    //
+
+
+                    // if (in_array($field['type'], $supported_field_types)) {
+                    // if (in_array($field['key'], $supported_field_ids)) {
+
+                        if( $field['type'] == 'flexible_content' ){
+
+                            foreach ($field['layouts'] as $layout) {
+
+                                foreach ($layout['sub_fields'] as $key => $sub_field) {
+
+                                    // echo "<pre>";
+                                    // print_r($sub_field['label']."\n");
+                                    // echo "</pre>";
+
+
+
+                                    if($sub_field['label'] == 'WYSIWYG'){
+                                        // $available_fields = array(
+                                        //     array($sub_field['key'] => $html_array[2], "acf_fc_layout" => $layout['name'])
+                                        // );
+                                    }
+
+                                    if($sub_field['label'] == 'Full width image'){
+
+                                        // echo "<pre>";
+                                        // print_r($sub_field);
+                                        // echo "</pre>";
+
+                                        // echo $faker->paragraph(40);
+
+
+                                        // echo $faker->imageUrl(800, 400, 'cats');
+
+
+                                        $new_media_id = $this->download_random_image( $this->faker );
+
+
+
+
+                                        //
+                                        // echo "<pre>";
+                                        // print_r($wp_filetype);
+                                        // echo "</pre>";
+                                        // echo "\n";
+                                        // echo "<pre>";
+                                        // print_r($file);
+                                        // echo "</pre>";
+                                        // echo "\n";
+                                        // echo "<pre>";
+                                        // print_r($filename);
+                                        // echo "</pre>";
+
+
+
+                                        //  $attachment = array(
+                                        //  'post_mime_type' => $wp_filetype['type'],
+                                        //  'post_title' => sanitize_file_name($filename),
+                                        //  'post_content' => '',
+                                        //  'post_status' => 'inherit'
+                                        //  );
+
+                                        //  require_once(ABSPATH . 'wp-admin/includes/image.php');
+                                        //  $attach_data = wp_generate_attachment_metadata($attach_id, $file);
+                                        //  wp_update_attachment_metadata($attach_id, $attach_data);
+
+
+
+
+                                        $available_fields = array(
+                                            array($sub_field['key'] => $new_media_id, "acf_fc_layout" => $layout['name'])
+                                        );
+
+                                    }
+
+
+
                                 }
-
-                                if($sub_field['label'] == 'Full width image'){
-
-                                    // echo "<pre>";
-                                    // print_r($sub_field);
-                                    // echo "</pre>";
-
-                                    // echo $faker->paragraph(40);
-
-
-                                    // echo $faker->imageUrl(800, 400, 'cats');
-
-
-                                    $new_media_id = $this->download_random_image($faker);
-
-
-
-
-                                    //
-                                    // echo "<pre>";
-                                    // print_r($wp_filetype);
-                                    // echo "</pre>";
-                                    // echo "\n";
-                                    // echo "<pre>";
-                                    // print_r($file);
-                                    // echo "</pre>";
-                                    // echo "\n";
-                                    // echo "<pre>";
-                                    // print_r($filename);
-                                    // echo "</pre>";
-
-
-
-                                    //  $attachment = array(
-                                    //  'post_mime_type' => $wp_filetype['type'],
-                                    //  'post_title' => sanitize_file_name($filename),
-                                    //  'post_content' => '',
-                                    //  'post_status' => 'inherit'
-                                    //  );
-
-                                    //  require_once(ABSPATH . 'wp-admin/includes/image.php');
-                                    //  $attach_data = wp_generate_attachment_metadata($attach_id, $file);
-                                    //  wp_update_attachment_metadata($attach_id, $attach_data);
-
-
-
-
-                                    $available_fields = array(
-                                        array($sub_field['key'] => $new_media_id, "acf_fc_layout" => $layout['name'])
-                                    );
-
-                                }
-
-
-
                             }
+
+                        }else{
+
+                            // echo "<pre>";
+                            // print_r();
+                            // echo "</pre>";
+
+                            $generate_fields->generate_content_for_field( $post_id, $field );
+
                         }
-
-                    }else{
-
                         // echo "<pre>";
-                        // print_r();
+                        // print_r($available_fields);
                         // echo "</pre>";
 
-                        $this->generate_content_for_field( $post_id, $field );
-
-                    }
-                    // echo "<pre>";
-                    // print_r($available_fields);
-                    // echo "</pre>";
 
 
 
-
-                // }
+                    // }
+                }
             }
-        };
+        }
 
         return $available_fields;
 
     }
-
-    // This might be useful in the future, but moved the content generation to inside
-    // find_field_groups_and_generate() function
-    // private function generate_content_for_fields( $available_fields ){
-    //
-    //     foreach ($available_fields as $key => $available_field) {
-    //
-    //         echo "<pre>";
-    //         print_r($available_field);
-    //         echo "</pre>";
-    //
-    //         echo $key;
-    //
-    //     }
-    // }
-
-
 
 
 }
