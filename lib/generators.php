@@ -20,24 +20,16 @@ class Generate_Cli extends \WP_CLI_Command {
 
                 $generated_posts = $generate_post->add_to_post_registry( $post_id );
 
-
-                echo "<pre>";
-                print_r($generated_posts);
-                echo "</pre>";
-
-
-
-
-
                 $fields = $this->add_content_to_custom_fields( $post_id );
 
+                WP_CLI::success( "Added '" . $content_type[0] . "' with ID: " . $post_id );
 
             }
 
         }else{
 
-            //ASTODO replace with cli output
-            echo "Please provide a content type as the last argument, for example: 'wp generate-a-tron generate page':\n";
+
+            WP_CLI::warning( "Please provide a content type as the last argument, for example: 'wp generate-a-tron generate page':" );
 
             $this->get_post_types( true );
 

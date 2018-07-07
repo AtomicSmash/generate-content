@@ -74,9 +74,9 @@ class Generate_Fields {
 
         $this->faker = Faker\Factory::create();
 
-
+        // Generate a sentence for a text area
         if( $field['type'] == 'text' ){
-            update_field( $field['key'], $this->faker->text(), $post_id );
+            update_field( $field['key'], $this->faker->sentence( 6, true ), $post_id );
             return true;
         }
 
