@@ -7,6 +7,7 @@ class Generate_Cli extends \WP_CLI_Command {
 
     function posts( $content_type = null ){
 
+
         $generate_post = new Generate_Posts();
 
         if( isset($content_type[0]) ){
@@ -15,11 +16,21 @@ class Generate_Cli extends \WP_CLI_Command {
 
             if(in_array($content_type[0], $post_types)){
 
+                $post_id = $generate_post->create_post( $content_type[0] );
+
+                $generated_posts = $generate_post->add_to_post_registry( $post_id );
 
 
-                $post_id = $generate_post->create_post($content_type[0]);
+                echo "<pre>";
+                print_r($generated_posts);
+                echo "</pre>";
 
-                $fields = $this->save_custom_fields( $post_id );
+
+
+
+
+                $fields = $this->add_content_to_custom_fields( $post_id );
+
 
             }
 
@@ -34,7 +45,7 @@ class Generate_Cli extends \WP_CLI_Command {
     }
 
 
-    private function get_post_types($echo = false){
+    private function get_post_types( $echo = false ){
 
         $args = array(
            'public'   => true,
@@ -116,7 +127,7 @@ class Generate_Cli extends \WP_CLI_Command {
 
     }
 
-    private function save_custom_fields( $post_id = 0 ){
+    private function add_content_to_custom_fields( $post_id = 0 ){
 
         $this->faker = Faker\Factory::create();
 
@@ -166,6 +177,12 @@ class Generate_Cli extends \WP_CLI_Command {
 
                 foreach( $fields as $field ) {
                     //
+
+                    // echo "<pre>";
+                    // print_r($fields);
+                    // echo "</pre>";
+
+
 
 
                     // if (in_array($field['type'], $supported_field_types)) {

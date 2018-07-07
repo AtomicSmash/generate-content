@@ -21,6 +21,19 @@ class Generate_Posts {
 
     }
 
+    public function add_to_post_registry( $post_id ){
+
+        $generated_posts = get_option( 'generated_posts' );
+
+        $generated_posts[] = $post_id;
+
+        update_option( 'generated_posts', $generated_posts );
+
+        return $generated_posts;
+
+    }
+
+
     private function get_post_types($echo = false){
 
         $args = array(

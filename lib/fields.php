@@ -75,10 +75,14 @@ class Generate_Fields {
         $this->faker = Faker\Factory::create();
 
 
+        if( $field['type'] == 'text' ){
+            update_field( $field['key'], $this->faker->text(), $post_id );
+            return true;
+        }
+
         if( $field['type'] == 'url' ){
-
             update_field( $field['key'], $this->faker->domainName(), $post_id );
-
+            return true;
         }
 
     }
