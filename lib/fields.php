@@ -74,6 +74,7 @@ class Generate_Fields {
 
         $this->faker = Faker\Factory::create();
 
+        //ASTODO turn this into a switch
         // Generate a sentence for a text area
         if( $field['type'] == 'text' ){
             update_field( $field['key'], $this->faker->sentence( 6, true ), $post_id );
@@ -85,6 +86,33 @@ class Generate_Fields {
             return true;
         }
 
+        if( $field['type'] == 'range' ){
+
+            // ACF default range values are 0 to 100
+            $min = 0;
+            $max = 100;
+
+            // If feild is saved with default value ['min'] and ['max'] will be blank
+            if( $field['min'] != "" ){
+                $min = $field['min'];
+            }
+            if( $field['max'] != "" ){
+                $max = $field['max'];
+            }
+
+            update_field( $field['key'], $this->faker->numberBetween( $min, $max ), $post_id );
+            return true;
+        }
+
+        if( $field['type'] == 'email' ){
+            update_field( $field['key'], $this->faker->email(), $post_id );
+            return true;
+        }
+
+        if( $field['type'] == 'password' ){
+            update_field( $field['key'], $this->faker->password(), $post_id );
+            return true;
+        }
     }
 
 }
