@@ -15,9 +15,9 @@ require( dirname( __FILE__ ) . '/vendor/autoload.php' );
 if (!defined('ABSPATH'))exit; //Exit if accessed directly
 
 if ( defined( 'WP_CLI' ) && WP_CLI ) {
-    require __DIR__ . '/lib/post.php';
-    require __DIR__ . '/lib/fields.php';
-    require __DIR__ . '/lib/generators.php';
+    require __DIR__ . '/lib/generate_posts.php';
+    require __DIR__ . '/lib/generate_fields.php';
+    require __DIR__ . '/lib/cli.php';
 
     WP_CLI::add_command( 'generate', 'Generate_Cli' );
 }
