@@ -36,7 +36,7 @@ class Generate_Cli extends \WP_CLI_Command {
         }
     }
 
-
+    //ASTOD Move this to the generate_posts.php file or visa versa
     private function get_post_types( $echo = false ){
 
         $args = array(
@@ -55,25 +55,25 @@ class Generate_Cli extends \WP_CLI_Command {
 
     }
 
-    private function build_random_html_array(){
+    // private function build_random_html_array(){
+    //
+    //     $html = array();
+    //
+    //     for ($i = 0; $i < 10; $i++) {
+    //         $html[$i] = file_get_contents('http://loripsum.net/api/4/medium/headers/ul/link/ol/bq/decorate/');
+    //     }
+    //
+    //     return $html;
+    //
+    // }
 
-        $html = array();
-
-        for ($i = 0; $i < 10; $i++) {
-            $html[$i] = file_get_contents('http://loripsum.net/api/4/medium/headers/ul/link/ol/bq/decorate/');
-        }
-
-        return $html;
-
-    }
-
-    private function grab_random_html(){
-
-        $html = file_get_contents('http://loripsum.net/api/4/medium/headers/ul/link/ol/bq/decorate/');
-
-        return $html;
-
-    }
+    // private function grab_random_html(){
+    //
+    //     $html = file_get_contents('http://loripsum.net/api/4/medium/headers/ul/link/ol/bq/decorate/');
+    //
+    //     return $html;
+    //
+    // }
 
     private function download_random_image($faker){
 
@@ -125,9 +125,9 @@ class Generate_Cli extends \WP_CLI_Command {
 
         $generate_fields = new Generate_Fields();
 
-        $available_fields = array();
+        // $available_fields = array();
 
-        $html_array = $this->build_random_html_array();
+        // $html_array = $this->build_random_html_array();
 
         if( function_exists( 'acf_get_field_groups' )){
 
@@ -276,7 +276,7 @@ class Generate_Cli extends \WP_CLI_Command {
             }
         }
 
-        return $available_fields;
+        return true;
 
     }
 
