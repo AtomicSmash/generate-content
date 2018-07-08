@@ -15,8 +15,8 @@ Generate runs **completely** on the WP-CLI, so there is no admin interface.
 A typical command would look like this:
 
 ```
- wp generate generate_content page 25
-```
+ wp generate posts post 25
+
 
 ## How does it work?
 
