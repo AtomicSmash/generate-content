@@ -1,4 +1,4 @@
-2# Generate Content
+# Generate Fake Content
 
 This plugin generates fake content for ACF Flexible content fields.
 
@@ -20,6 +20,57 @@ A typical command would look like this:
 
 ## How does it work?
 
-This plugin is heavily reliant on the amazing 'Faker' library.
+This plugin is heavily reliant on the amazing 'Faker' library by Francois Zaninotto.
 
 https://github.com/fzaninotto/Faker
+
+## Which ACF fields are supported?
+
+This is a breakdown of the current supported fields
+
+### Basic
+- [x] Text
+- [x] Text Area
+- [x] Number
+- [x] Range
+- [x] Email
+- [x] Url
+- [x] Password
+
+### Content
+- [ ] Image
+- [ ] File
+- [ ] Wysiwyg Editor
+- [ ] oEmbed
+- [ ] Gallery
+
+### Choice
+- [x] Select
+- [x] Checkbox
+- [x] Radio Button
+- [ ] Button Group
+- [ ] True / False
+
+### Relational
+- [ ] Link
+- [ ] Post Object
+- [ ] Page Link
+- [ ] Relationship
+- [ ] Taxonomy
+- [ ] User
+
+### Javascript
+- [ ] Google Map
+- [ ] Date Picker
+- [ ] Date Time Picker
+- [ ] Time Picker
+- [ ] Color Picker
+
+### Layout
+- [ ] Message
+- [ ] Accordion
+- [ ] Tab
+- [ ] Group
+- [ ] Repeater
+- [ ] Flexible Content
+- [ ] Clone
