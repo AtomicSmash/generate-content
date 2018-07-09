@@ -70,25 +70,28 @@ class Generate_Fields {
     }
 
 
-    public function generate_content_for_field( $post_id = 0, $field = array() ){
+    public function generate_content_for_field( $post_id = 0, $field = array(), $return_content = false ){
 
         $this->faker = Faker\Factory::create();
 
         //ASTODO turn this into a switch
         // Generate a sentence for a text area
         if( $field['type'] == 'text' ){
-            update_field( $field['key'], $this->faker->sentence( 6, true ), $post_id );
-            return true;
+
+            $content = $this->faker->sentence( 6, true );
+
         }
 
         if( $field['type'] == 'textarea' ){
-            update_field( $field['key'], $this->faker->sentence( 100, true ), $post_id );
-            return true;
+
+            $content = $this->faker->sentence( 100, true );
+
         }
 
         if( $field['type'] == 'url' ){
-            update_field( $field['key'], $this->faker->domainName(), $post_id );
-            return true;
+
+            $content = $this->faker->domainName();
+
         }
 
         if( $field['type'] == 'range' || $field['type'] == 'number' ){
@@ -105,18 +108,20 @@ class Generate_Fields {
                 $max = $field['max'];
             }
 
-            update_field( $field['key'], $this->faker->numberBetween( $min, $max ), $post_id );
-            return true;
+            $content = $this->faker->numberBetween( $min, $max );
+
         }
 
         if( $field['type'] == 'email' ){
-            update_field( $field['key'], $this->faker->email(), $post_id );
-            return true;
+
+            $content = $this->faker->email();
+
         }
 
         if( $field['type'] == 'password' ){
-            update_field( $field['key'], $this->faker->password(), $post_id );
-            return true;
+
+            $content = $this->faker->password();
+
         }
 
         if( $field['type'] == 'select' || $field['type'] == 'radio' ){
@@ -130,9 +135,8 @@ class Generate_Fields {
 
                 $random_key = $this->faker->numberBetween( 0, ( count( $select_options ) - 1 ) );
 
-                update_field( $field['key'], $select_options[ $random_key ], $post_id );
+                $content = $select_options[ $random_key ];
 
-                return true;
             }
         }
 
@@ -148,11 +152,15 @@ class Generate_Fields {
                     }
                 }
 
-                update_field( $field['key'], $select_options, $post_id );
+                $content = $select_options;
 
-                return true;
             }
         }
+
+        update_field( $field['key'], $content, $post_id );
+
+        return true;
+
 
     }
 

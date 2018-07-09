@@ -157,24 +157,23 @@ class Generate_Cli extends \WP_CLI_Command {
                         // echo "</pre>";
 
 
-                        $value = array(
-                            array(
-                                'content_blocks__wysiwyg__wysiwyg' => 'asdasdasd',
-                                'acf_fc_layout' => 'content_blocks__wysiwyg'
-                            )
-                        );
-
-
-
-                        update_field( $field['key'], $value, $post_id );
-
-
                         //ASTODO check layouts are available before entering for each
                         foreach ($field['layouts'] as $layout) {
 
                             // echo "<pre>";
                             // print_r($layout);
                             // echo "</pre>";
+
+
+                            $value = array(
+                                array(
+                                    'content_blocks__wysiwyg__wysiwyg' => 'asdasdasd',
+                                    'acf_fc_layout' => 'content_blocks__wysiwyg'
+                                )
+                            );
+
+                            // update_field( $field['key'], $value, $post_id );
+
 
 
                             foreach ($layout['sub_fields'] as $key => $sub_field) {
