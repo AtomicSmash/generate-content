@@ -119,36 +119,39 @@ class Generate_Fields {
             return true;
         }
 
-        if( $field['type'] == 'select' ){
+        if( $field['type'] == 'select' || $field['type'] == 'radio' ){
 
             $select_options = array();
 
-            foreach( $field['choices'] as $key => $choice ){
-                $select_options[] = $key;
+            if( count( $field['choices'] ) > 0 ){
+                foreach( $field['choices'] as $key => $choice ){
+                    $select_options[] = $key;
+                }
+
+                $random_key = $this->faker->numberBetween( 0, ( count( $select_options ) - 1 ) );
+
+                update_field( $field['key'], $select_options[ $random_key ], $post_id );
+
+                return true;
             }
-
-            $random_key = $this->faker->numberBetween( 0, ( count( $select_options ) - 1 ) );
-
-            update_field( $field['key'], $select_options[ $random_key ], $post_id );
-
-            return true;
         }
 
         if( $field['type'] == 'checkbox' ){
 
             $select_options = array();
 
-            foreach( $field['choices'] as $key => $choice ){
+            if( count( $field['choices'] ) > 0 ){
 
-                if( $this->faker->boolean() ){
-                    $select_options[] = $key;
+                foreach( $field['choices'] as $key => $choice ){
+                    if( $this->faker->boolean() ){
+                        $select_options[] = $key;
+                    }
                 }
 
+                update_field( $field['key'], $select_options, $post_id );
+
+                return true;
             }
-
-            update_field( $field['key'], $select_options, $post_id );
-
-            return true;
         }
 
     }
