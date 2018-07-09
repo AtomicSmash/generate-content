@@ -81,12 +81,17 @@ class Generate_Fields {
             return true;
         }
 
+        if( $field['type'] == 'textarea' ){
+            update_field( $field['key'], $this->faker->sentence( 100, true ), $post_id );
+            return true;
+        }
+
         if( $field['type'] == 'url' ){
             update_field( $field['key'], $this->faker->domainName(), $post_id );
             return true;
         }
 
-        if( $field['type'] == 'range' ){
+        if( $field['type'] == 'range' || $field['type'] == 'number' ){
 
             // ACF default range values are 0 to 100
             $min = 0;
@@ -113,6 +118,7 @@ class Generate_Fields {
             update_field( $field['key'], $this->faker->password(), $post_id );
             return true;
         }
+
     }
 
 }

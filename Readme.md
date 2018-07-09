@@ -1,4 +1,4 @@
-# Generate Content
+2# Generate Content
 
 This plugin generates fake content for ACF Flexible content fields.
 
@@ -15,11 +15,11 @@ Generate runs **completely** on the WP-CLI, so there is no admin interface.
 A typical command would look like this:
 
 ```
- wp generate posts post 25
-
+ wp generate posts post
+```
 
 ## How does it work?
 
-TBC...
+This plugin is heavily reliant on the amazing 'Faker' library.
 
 https://github.com/fzaninotto/Faker
