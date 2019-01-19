@@ -157,10 +157,7 @@ class Generate_Fields {
             }
         }
 
-        update_field( $field['key'], $content, $post_id );
-
-        return true;
-
+        return $content;
 
     }
 

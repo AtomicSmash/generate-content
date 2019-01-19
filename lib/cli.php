@@ -116,31 +116,6 @@ class Generate_Cli extends \WP_CLI_Command {
             foreach( $groups as $group ){
 
 
-
-                // Way of generating fake HTML
-                // $document = new \DOMDocument();
-                // // $this->idGenerator = new UniqueGenerator($this->generator);
-                //
-                // $head = $document->createElement("head");
-                // $body = $document->createElement("body");
-                // $node = $document->createElement("p");
-                //
-                // $document->appendChild($node);
-                //
-                // $text = $document->createTextNode('asdhaskjdhaskdjhask akjsdh akdjhas kdjhask');
-                // $link = $document->createElement('a');
-                // $link->setAttribute("href", 'example-link');
-                // $link->appendChild($text);
-                // $node->appendChild($link);
-                //
-                //
-                // echo $document->saveHTML();
-
-
-
-
-                // die();
-
                 $fields = acf_get_fields( $group );
 
                 // $supported_field_types = array('email', 'text', 'textarea', 'repeater', 'flexible_content', 'qtranslate_file', 'qtranslate_image', 'qtranslate_text', 'qtranslate_textarea', 'qtranslate_wysiwyg');
@@ -152,41 +127,55 @@ class Generate_Cli extends \WP_CLI_Command {
 
                     if( $field['type'] == 'flexible_content' ){
 
-                        // echo "<pre>";
-                        // print_r($field);
-                        // echo "</pre>";
-
-
+                        $flexible_content = array();
                         //ASTODO check layouts are available before entering for each
-                        foreach ($field['layouts'] as $layout) {
+                        foreach ( $field['layouts'] as $layout ) {
 
                             // echo "<pre>";
                             // print_r($layout);
                             // echo "</pre>";
 
 
-                            $value = array(
-                                array(
-                                    'content_blocks__wysiwyg__wysiwyg' => 'asdasdasd',
-                                    'acf_fc_layout' => 'content_blocks__wysiwyg'
-                                )
-                            );
 
-                            // update_field( $field['key'], $value, $post_id );
-
-
-
+                            $flexible_content__field_group = array();
                             foreach ($layout['sub_fields'] as $key => $sub_field) {
 
                                 // echo "<pre>";
-                                // print_r($sub_field['label']."\n");
+                                // print_r( $content );
                                 // echo "</pre>";
 
-                                // $generate_fields->generate_content_for_field( $post_id, $field );
+                                $content = $generate_fields->generate_content_for_field( $post_id, $sub_field );
+
+                                // echo "<pre>";
+                                // print_r($content);
+                                // echo "</pre>";
+                                //
+                                // $sub_field['name'] = "asda"
+                                $flexible_content__field_group[ $sub_field['name'] ] = $content;
+
+                            }
+
+                            $flexible_content__field_group['acf_fc_layout'] = $layout['name'];
+
+                            $flexible_content[] = $flexible_content__field_group;
+
+                        }
+                        // 
+                        // $value = array(
+                        //     array(
+                        //         'paragraph' => $content,
+                        //         'acf_fc_layout' => 'flex_intro_paragraph'
+                        //     )
+                        // );
 
 
+                        update_field( $field['key'], $flexible_content, $post_id );
 
-                                if($sub_field['label'] == 'Full width image'){
+
+                                // update_field( $field['key'], $content, $post_id );
+
+
+                                // if($sub_field['label'] == 'Full width image'){
 
                                     // echo "<pre>";
                                     // print_r($sub_field);
@@ -201,9 +190,6 @@ class Generate_Cli extends \WP_CLI_Command {
                                     // $new_media_id = $this->download_random_image( $this->faker );
 
 
-
-
-                                    //
                                     // echo "<pre>";
                                     // print_r($wp_filetype);
                                     // echo "</pre>";
@@ -233,16 +219,10 @@ class Generate_Cli extends \WP_CLI_Command {
 
 
                                     // $available_fields = array(
-                                        // array($sub_field['key'] => $new_media_id, "acf_fc_layout" => $layout['name'])
+                                    //     array($sub_field['key'] => $new_media_id, "acf_fc_layout" => $layout['name'])
                                     // );
 
-                                }
-
-
-
-                            }
-                        }
-
+                                // }
 
 
                     }else{
